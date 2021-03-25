@@ -4,54 +4,6 @@ require(parallel)
 require(stringi)
 require(RCurl)
 
-dynClusterApply <- function(cl = NULL, fun, n, argfun) {
-  # n: number of jobs
-  cl <- parallel:::defaultCluster(cl)
-  p <- length(cl)
-  if (n > 0L && p) {
-    submit <- function(node, job) parallel:::sendCall(cl[[node]], fun, argfun(job), tag = job)
-    for (i in 1:min(n, p)) submit(i, i)
-    val <- vector("list", n)
-    for (i in 1:n) {
-      #' show status in a line always
-      cat('\r', 'parallel processing: ', i, '/', n)
-      flush.console()
-      #' receive results
-      d <- parallel:::recvOneResult(cl)
-      j <- i + min(n, p)
-      #' continue submitting jobs
-      if (j <= n) {
-        submit(d$node, j)
-      } 
-      val[d$tag] <- list(d$value)
-    }
-    parallel:::checkForRemoteErrors(val)
-  }
-}
-
-
-clusterApplyBal <- function(cl = NULL, x, fun, ...) {
-  argfun <- function(i) c(list(x[[i]]), list(...))
-  dynClusterApply(cl, fun, length(x), argfun)
-}
-
-
-doDynParLapply <- function(cl = NULL, X, fun, ..., chunkSize = NULL) {
-  cl <- parallel:::defaultCluster(cl)
-  nchunks <- parallel:::dynamicNChunks(length(X), length(cl), chunkSize)
-  do.call(c, clusterApplyBal(cl = cl, x = parallel:::splitList(X, nchunks), fun = lapply, FUN = fun, ...), quote = TRUE)
-} 
-
-
-closeTheConnections <- function(cl) {
-  # close connection
-  parallel::stopCluster(cl)
-  if (nrow(showConnections(all = FALSE)) > 0) {
-    closeAllConnections()
-  }
-  gc(); gc()
-}
-
 
 .ls.objects <- function (pos = 1, pattern, order.by,
                          decreasing = FALSE, 
