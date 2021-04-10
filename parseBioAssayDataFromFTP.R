@@ -60,7 +60,7 @@ getPubChemInfo <- function(curAidFnFp) {
   # purpose 
   #   parse pubchem bioassay csv files from FTP
   # input 
-  #   curAidFnFp: string, current file name full path, such as: "/mnt/LHRI/Bioinformatics/Projects/DAVIDUpdate/pubchem3/data/1160654.csv.gz"
+  #   curAidFnFp: string, current file name full path, such as: "/pubchem3/data/1160654.csv.gz"
   # output 
   #   data.table, parsed result
 
@@ -420,12 +420,12 @@ createFolders <- function(parentFolder) {
   # purpose
   #   make all folders parentFolder/data, parentFolder/mapping_file, and parentFolder/output
   # input
-  #   parentFolder: string, like: /mnt/LHRI/Bioinformatics/Projects/DAVIDUpdate/pubchem
+  #   parentFolder: string, like: /pubchem
   # output
   #   created folders for pubchem ftp bioassay parsing project
   
   # example
-  # parentFolder <- "/mnt/LHRI/Bioinformatics/Projects/DAVIDUpdate/pubchem4/"
+  # parentFolder <- "/pubchem4/"
   
   
   if (!dir.exists(parentFolder)) {
@@ -449,14 +449,14 @@ createFolders <- function(parentFolder) {
   
   return(invisible(NULL))
 }
-# nullRes <- createFolders(parentFolder = "/mnt/LHRI/Bioinformatics/Projects/DAVIDUpdate/pubchem4/")
+# nullRes <- createFolders(parentFolder = "/pubchem4/")
 
 
 dlPcMappingFileFromFtp <- function(parentFolder) {
   # purpose
   #   download useful mapping files from pubchem FTP (BioAssay and Compound)
   # input
-  #   savedFolder: string, like savedFolderTmp <- "/mnt/LHRI/Bioinformatics/Projects/DAVIDUpdate/pubchem2"
+  #   savedFolder: string, like savedFolderTmp <- "/pubchem2"
   # output
   #   downloaded file in the $savedFolder/mapping_file directory
   
@@ -493,7 +493,7 @@ dlPcMappingFileFromFtp <- function(parentFolder) {
   
   return(invisible((NULL)))
 }
-# nullRes <- dlPcMappingFileFromFtp(parentFolder = "/mnt/LHRI/Bioinformatics/Projects/DAVIDUpdate/pubchem4/")
+# nullRes <- dlPcMappingFileFromFtp(parentFolder = "/pubchem4/")
 
 
 extractGoodAid <- function(parentFolder) {
@@ -544,7 +544,6 @@ extractGoodAid <- function(parentFolder) {
   
   return(aidVecGiGeneidConfDt)
 }
-# aidDt <- extractGoodAid(parentFolder = "/mnt/LHRI/Bioinformatics/Projects/DAVIDUpdate/pubchem4/")
 
 
 # dlPcAidCsvFromFtp <- function(parentFolder, aidDt, numDict = 1400, ncores = 30) {
@@ -721,12 +720,6 @@ dlPcAidCsvFromFtp <- function(parentFolder, aidDt, ncores = 30) {
     
   return(invisible(NULL))
 }
-# system.time(nullRes <- dlPcAidCsvFromFtp(parentFolder = "/mnt/LHRI/Bioinformatics/Projects/DAVIDUpdate/pubchem4/", aidDt, numDict = 1400, ncores = 30))
-# 5.5 min
-# length(list.files("/mnt/LHRI/Bioinformatics/Projects/DAVIDUpdate/pubchem4/data"))
-# 140421
-# 2020-07-12 blow
-# system.time(nullRes <- dlPcAidCsvFromFtp(parentFolder = "/data/Members/haom/NIAID_Projects/DAVID_MingHAO/pubchemNew20200712", aidDt, ncores = 30))
 
 
 parseBioassay <- function(parentFolder, aidDt, ncores = 32) {
@@ -773,8 +766,7 @@ parseBioassay <- function(parentFolder, aidDt, ncores = 32) {
   
   return(dtFnl)
 }
-# system.time(dtFnl <- parseBioassay(parentFolder = "/mnt/LHRI/Bioinformatics/Projects/DAVIDUpdate/pubchem4/", aidDt, ncores = 32))
-# 5.5 min
+
 
 
 analyzeParsedData <- function(parentFolder, dtFnl) {
@@ -787,7 +779,7 @@ analyzeParsedData <- function(parentFolder, dtFnl) {
   #   tab-delimited format data such as: GeneId   CID~CompoundName   AID1,AID2,AID3
   
   # example
-  # parentFolder <- "/mnt/LHRI/Bioinformatics/Projects/DAVIDUpdate/pubchem5/"
+  # parentFolder <- "/pubchem5/"
   # outputFolder <- paste0(parentFolder, "/output")
   # dtFnl <- data.table::fread(paste0(outputFolder, "/dtFnl.csv"))
   
